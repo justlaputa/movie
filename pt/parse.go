@@ -2,6 +2,7 @@ package pt
 
 import (
 	"fmt"
+	"log"
 	"math"
 	"strconv"
 	"strings"
@@ -9,6 +10,7 @@ import (
 
 type DigitalFormat uint8
 type DigitalResolution uint8
+type DigitalFileSize uint64
 
 const (
 	Blueray DigitalFormat = iota
@@ -44,12 +46,19 @@ type MovieInfo struct {
 	Group      string
 	Source     DigitalFormat
 	Resolution DigitalResolution
+	Size       DigitalFileSize
 }
 
 func ParseHDCTitle(title string) MovieInfo {
 	m := MovieInfo{}
 	if title == "" {
 		return m
+	}
+
+	var size DigitalFileSize
+	title, sizeString := removeEndBracket(title)
+	if sizeString != "" {
+		size = parseSize(sizeString)
 	}
 
 	fields := split(title)
@@ -64,8 +73,44 @@ func ParseHDCTitle(title string) MovieInfo {
 	movieTitle := strings.Join(fields[:minIndex], " ")
 
 	return MovieInfo{
-		movieTitle, year, group, source, resolution,
+		movieTitle, year, group, source, resolution, size,
 	}
+}
+
+func removeEndBracket(s string) (string, string) {
+	s = strings.TrimSpace(s)
+	l := len(s)
+	if s[l-1:] == "]" {
+		if i := strings.LastIndex(s, "["); i > 0 {
+			return s[0:i], s[i+1 : l-1]
+		}
+	}
+	return s, ""
+}
+
+func parseSize(s string) DigitalFileSize {
+	s = strings.TrimSpace(s)
+	fields := strings.Split(s, " ")
+	if len(fields) < 2 {
+		return 0
+	}
+
+	var size DigitalFileSize
+
+	ssize, err := strconv.ParseFloat(fields[0], 64)
+	if err != nil {
+		log.Printf("failed to parse digital size from %s: %v", fields[0], err)
+		return 0
+	}
+
+	switch strings.ToLower(fields[1]) {
+	case "gb":
+		size = DigitalFileSize(ssize * 1e9)
+	case "mb":
+		size = DigitalFileSize(ssize * 1e6)
+	}
+
+	return size
 }
 
 func split(title string) []string {
