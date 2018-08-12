@@ -49,6 +49,18 @@ type MovieInfo struct {
 	Size       DigitalFileSize
 }
 
+//ParseHDCTitle parse a HDC movie title string into structured movie information
+// example:
+// movie := ParseHDCTitle("Man.in.Black.1997.UHDTV.4K.HEVC-HDCTV[7.33 GB]")
+// movie will have following value:
+// {
+// 	Title:      "Man in Black",
+// 	Year:       1997,
+// 	Group:      "HDCTV",
+// 	Source:     UHDTV,
+// 	Resolution: UHD4K,
+// 	Size:       7330000000, //in Bytes
+// }
 func ParseHDCTitle(title string) MovieInfo {
 	m := MovieInfo{}
 	if title == "" {
