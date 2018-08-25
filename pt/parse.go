@@ -21,8 +21,11 @@ const (
 )
 
 const (
+	//FHD 1080p video
 	FHD DigitalResolution = iota
+	//HD 720p video
 	HD
+	//UHD4K 4K video
 	UHD4K
 	UnknownResolution
 )
@@ -62,9 +65,8 @@ type MovieInfo struct {
 // 	Size:       7330000000, //in Bytes
 // }
 func ParseHDCTitle(title string) MovieInfo {
-	m := MovieInfo{}
 	if title == "" {
-		return m
+		return MovieInfo{}
 	}
 
 	var size DigitalFileSize
@@ -132,7 +134,8 @@ func split(title string) []string {
 }
 
 func findYear(fields []string) (int, int) {
-	for i, f := range fields {
+	for i := len(fields) - 1; i >= 0; i-- {
+		f := fields[i]
 		if year, err := tryParseYear(f); err == nil {
 			return year, i
 		}
@@ -180,6 +183,9 @@ func findGroup(fields []string) string {
 	}
 
 	last := fields[len(fields)-1]
+	if last == "iso" {
+		last = fields[len(fields)-2]
+	}
 
 	if i := strings.LastIndex(last, "-"); i >= 0 {
 		group := last[i+1:]
