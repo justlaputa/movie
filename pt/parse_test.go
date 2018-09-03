@@ -16,6 +16,8 @@ func TestParseHDC(t *testing.T) {
 		"The.Longest.Nite.1998.HDTV.1080p.H264.AAC-luobo333[3.5 GB]",                        // HDTV
 		"2036.Origin.Unknown.2018.1080p.Blu-ray.AVC.DTS-HD.MA.5.1-Huan@HDSky.iso[21.43 GB]", //Year in Title
 		"Arizona 2018 1080p WEB-DL DD5 1 H264-CMRG[2.94 GB]",
+		"Thor Ragnarok 2017 3D SBS 720p AVC AC3 5.1[6.84 GB]",
+		"Sadako.3D.2.2013.BluRay.1080p.x264.DTS-HD.MA.5.1-HDWinG[8.72 GB]",
 	}
 
 	expected := []MovieInfo{
@@ -31,6 +33,8 @@ func TestParseHDC(t *testing.T) {
 		{"The Longest Nite", 1998, "luobo333", HDTV, FHD, 3500000000},
 		{"2036 Origin Unknown", 2018, "HDSky", Blueray, FHD, 21430000000},
 		{"Arizona", 2018, "CMRG", WebDL, FHD, 2940000000},
+		{"Thor Ragnarok", 2017, "", Blueray3D, HD, 6840000000},
+		{"Sadako", 2013, "HDWinG", Blueray3D, FHD, 8720000000},
 	}
 
 	for i := range titles {

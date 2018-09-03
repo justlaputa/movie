@@ -12,11 +12,13 @@ type DigitalFormat uint8
 type DigitalResolution uint8
 type DigitalFileSize uint64
 
+//go:generate stringer -type=DigitalFormat
 const (
 	Blueray DigitalFormat = iota
 	HDTV
 	WebDL
 	UHDTV
+	Blueray3D
 	UnknownDigitalFormat
 )
 
@@ -27,14 +29,31 @@ const (
 	HD
 	//UHD4K 4K video
 	UHD4K
+	//UnknownResolution unknow resolution
 	UnknownResolution
 )
 
+//DigitalResolutionString string name of each resolution type
+var DigitalResolutionString = []string{
+	"1080p",
+	"720p",
+	"4K",
+	"Unknown",
+}
+
+func (i DigitalResolution) String() string {
+	if i >= DigitalResolution(len(DigitalResolutionString)-1) {
+		return "DigitalResolution(" + strconv.FormatInt(int64(i), 10) + ")"
+	}
+	return DigitalResolutionString[i]
+}
+
 var DigitalFormatMap = map[DigitalFormat][]string{
-	Blueray: []string{"bluray", "blu-ray", "blueray", "bd"},
-	HDTV:    []string{"hdtv"},
-	WebDL:   []string{"webdl", "web-dl"},
-	UHDTV:   []string{"uhdtv"},
+	Blueray:   []string{"bluray", "blu-ray", "blueray", "bd"},
+	HDTV:      []string{"hdtv"},
+	WebDL:     []string{"webdl", "web-dl"},
+	UHDTV:     []string{"uhdtv"},
+	Blueray3D: []string{"3d", "sbs"},
 }
 
 var DigitalResolutionMap = map[DigitalResolution][]string{
