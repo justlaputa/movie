@@ -69,6 +69,7 @@ type MovieInfo struct {
 	Source     DigitalFormat
 	Resolution DigitalResolution
 	Size       DigitalFileSize
+	ID         string
 }
 
 //ParseHDCTitle parse a HDC movie title string into structured movie information
@@ -106,7 +107,7 @@ func ParseHDCTitle(title string) MovieInfo {
 	movieTitle := strings.Join(fields[:minIndex], " ")
 
 	return MovieInfo{
-		movieTitle, year, group, source, resolution, size,
+		movieTitle, year, group, source, resolution, size, "",
 	}
 }
 
