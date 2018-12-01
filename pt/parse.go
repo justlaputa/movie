@@ -8,29 +8,9 @@ import (
 	"strings"
 )
 
-type DigitalFormat uint8
-type DigitalResolution uint8
-type DigitalFileSize uint64
-
-//go:generate stringer -type=DigitalFormat
 const (
-	Blueray DigitalFormat = iota
-	HDTV
-	WebDL
-	UHDTV
-	Blueray3D
-	UnknownDigitalFormat
-)
-
-const (
-	//FHD 1080p video
-	FHD DigitalResolution = iota
-	//HD 720p video
-	HD
-	//UHD4K 4K video
-	UHD4K
-	//UnknownResolution unknow resolution
-	UnknownResolution
+	HDCSite   = "HDChina"
+	PutaoSite = "Putao"
 )
 
 //DigitalResolutionString string name of each resolution type
@@ -51,7 +31,7 @@ func (i DigitalResolution) String() string {
 var DigitalFormatMap = map[DigitalFormat][]string{
 	Blueray:   []string{"bluray", "blu-ray", "blueray", "bd"},
 	HDTV:      []string{"hdtv"},
-	WebDL:     []string{"webdl", "web-dl"},
+	WebDL:     []string{"webdl", "web-dl", "webrip", "web"},
 	UHDTV:     []string{"uhdtv"},
 	Blueray3D: []string{"3d", "sbs"},
 }
@@ -59,7 +39,7 @@ var DigitalFormatMap = map[DigitalFormat][]string{
 var DigitalResolutionMap = map[DigitalResolution][]string{
 	FHD:   []string{"1080", "1080p", "1080i"},
 	HD:    []string{"720", "720p"},
-	UHD4K: []string{"4k"},
+	UHD4K: []string{"4k", "2160p"},
 }
 
 type MovieInfo struct {
@@ -70,6 +50,7 @@ type MovieInfo struct {
 	Resolution DigitalResolution
 	Size       DigitalFileSize
 	ID         string
+	Site       string
 }
 
 //ParseHDCTitle parse a HDC movie title string into structured movie information
@@ -107,8 +88,52 @@ func ParseHDCTitle(title string) MovieInfo {
 	movieTitle := strings.Join(fields[:minIndex], " ")
 
 	return MovieInfo{
-		movieTitle, year, group, source, resolution, size, "",
+		movieTitle, year, group, source, resolution, size, "", HDCSite,
 	}
+}
+
+//ParsePutaoTitle parse putao movie item title
+func ParsePutaoTitle(title string) MovieInfo {
+	info := MovieInfo{Site: PutaoSite}
+	if title == "" {
+		return info
+	}
+
+	title = removeBeginBracket(title)
+
+	title, sizeString := removeEndBracket(title)
+	if sizeString != "" {
+		info.Size = parseSize(sizeString)
+	}
+
+	fields := split(title)
+
+	year, yearIndex := findYear(fields)
+	info.Year = year
+
+	source, sourceIndex := findSource(fields)
+	info.Source = source
+
+	resolution, resIndex := findResolution(fields)
+	info.Resolution = resolution
+
+	info.Group = findGroup(fields)
+
+	minIndex := minPositive(yearIndex, sourceIndex, resIndex)
+
+	info.Title = strings.Join(fields[:minIndex], " ")
+
+	return info
+}
+
+func removeBeginBracket(s string) string {
+	s = strings.TrimSpace(s)
+	if len(s) > 0 && s[0] == '[' {
+		if i := strings.Index(s, "]"); i > 0 {
+			return s[i+1:]
+		}
+	}
+	return s
 }
 
 func removeEndBracket(s string) (string, string) {
