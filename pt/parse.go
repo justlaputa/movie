@@ -49,13 +49,11 @@ type MovieInfo struct {
 	Source     DigitalFormat
 	Resolution DigitalResolution
 	Size       DigitalFileSize
-	ID         string
-	Site       string
 }
 
-//ParseHDCTitle parse a HDC movie title string into structured movie information
+//ParseTitle parse a movie title string into structured movie information
 // example:
-// movie := ParseHDCTitle("Man.in.Black.1997.UHDTV.4K.HEVC-HDCTV[7.33 GB]")
+// movie := ParseTitle("Man.in.Black.1997.UHDTV.4K.HEVC-HDCTV[7.33 GB]")
 // movie will have following value:
 // {
 // 	Title:      "Man in Black",
@@ -65,36 +63,9 @@ type MovieInfo struct {
 // 	Resolution: UHD4K,
 // 	Size:       7330000000, //in Bytes
 // }
-func ParseHDCTitle(title string) MovieInfo {
-	if title == "" {
-		return MovieInfo{}
-	}
+func ParseTitle(title string) MovieInfo {
+	info := MovieInfo{}
 
-	var size DigitalFileSize
-	title, sizeString := removeEndBracket(title)
-	if sizeString != "" {
-		size = parseSize(sizeString)
-	}
-
-	fields := split(title)
-
-	year, yearIndex := findYear(fields)
-	source, sourceIndex := findSource(fields)
-	resolution, resIndex := findResolution(fields)
-	group := findGroup(fields)
-
-	minIndex := minPositive(yearIndex, sourceIndex, resIndex)
-
-	movieTitle := strings.Join(fields[:minIndex], " ")
-
-	return MovieInfo{
-		movieTitle, year, group, source, resolution, size, "", HDCSite,
-	}
-}
-
-//ParsePutaoTitle parse putao movie item title
-func ParsePutaoTitle(title string) MovieInfo {
-	info := MovieInfo{Site: PutaoSite}
 	if title == "" {
 		return info
 	}
