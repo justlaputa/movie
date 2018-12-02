@@ -9,7 +9,6 @@ type DigitalFormat uint8
 type DigitalResolution uint8
 type DigitalFileSize uint64
 
-//go:generate stringer -type=DigitalFormat
 const (
 	UnknownDigitalFormat DigitalFormat = iota
 	Blueray
