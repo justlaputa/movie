@@ -8,11 +8,6 @@ import (
 	"strings"
 )
 
-const (
-	HDCSite   = "HDChina"
-	PutaoSite = "Putao"
-)
-
 //DigitalResolutionString string name of each resolution type
 var DigitalResolutionString = []string{
 	"1080p",
