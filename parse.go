@@ -8,8 +8,7 @@ import (
 	"strings"
 )
 
-//DigitalResolutionString string name of each resolution type
-var DigitalResolutionString = []string{
+var digitalResolutionString = []string{
 	"1080p",
 	"720p",
 	"4K",
@@ -17,13 +16,13 @@ var DigitalResolutionString = []string{
 }
 
 func (i DigitalResolution) String() string {
-	if i >= DigitalResolution(len(DigitalResolutionString)-1) {
+	if i >= DigitalResolution(len(digitalResolutionString)-1) {
 		return "DigitalResolution(" + strconv.FormatInt(int64(i), 10) + ")"
 	}
-	return DigitalResolutionString[i]
+	return digitalResolutionString[i]
 }
 
-var DigitalFormatMap = map[DigitalFormat][]string{
+var digitalFormatMap = map[DigitalFormat][]string{
 	Blueray:   []string{"bluray", "blu-ray", "blueray", "bd"},
 	HDTV:      []string{"hdtv"},
 	WebDL:     []string{"webdl", "web-dl", "webrip", "web"},
@@ -31,19 +30,10 @@ var DigitalFormatMap = map[DigitalFormat][]string{
 	Blueray3D: []string{"3d", "sbs"},
 }
 
-var DigitalResolutionMap = map[DigitalResolution][]string{
+var digitalResolutionMap = map[DigitalResolution][]string{
 	FHD:   []string{"1080", "1080p", "1080i"},
 	HD:    []string{"720", "720p"},
 	UHD4K: []string{"4k", "2160p"},
-}
-
-type MovieInfo struct {
-	Title      string
-	Year       int
-	Group      string
-	Source     DigitalFormat
-	Resolution DigitalResolution
-	Size       DigitalFileSize
 }
 
 //ParseTitle parse a movie title string into structured movie information
@@ -168,7 +158,7 @@ func tryParseYear(yyyy string) (int, error) {
 
 func findSource(fields []string) (DigitalFormat, int) {
 	for i, field := range fields {
-		for format, names := range DigitalFormatMap {
+		for format, names := range digitalFormatMap {
 			if contains(names, strings.ToLower(field)) {
 				return format, i
 			}
@@ -179,7 +169,7 @@ func findSource(fields []string) (DigitalFormat, int) {
 
 func findResolution(fields []string) (DigitalResolution, int) {
 	for i, field := range fields {
-		for format, names := range DigitalResolutionMap {
+		for format, names := range digitalResolutionMap {
 			if contains(names, strings.ToLower(field)) {
 				return format, i
 			}

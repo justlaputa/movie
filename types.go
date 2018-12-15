@@ -5,16 +5,27 @@ import (
 	"encoding/json"
 )
 
+//DigitalFormat blueray, webdl, etc
 type DigitalFormat uint8
+
+//DigitalResolution resolution, 4K, 1080p, 720p
 type DigitalResolution uint8
+
+//DigitalFileSize file size in Byte
 type DigitalFileSize uint64
 
 const (
+	//UnknownDigitalFormat unknow foramt
 	UnknownDigitalFormat DigitalFormat = iota
+	//Blueray blueray disk
 	Blueray
+	//HDTV recorded from hdtv
 	HDTV
+	//WebDL web downlaoded source
 	WebDL
+	//UHDTV recorded from 4K tv
 	UHDTV
+	//Blueray3D 3D bluray disk
 	Blueray3D
 )
 
@@ -28,6 +39,16 @@ const (
 	//UHD4K 4K video
 	UHD4K
 )
+
+//MovieInfo metadata for a PT movie item
+type MovieInfo struct {
+	Title      string
+	Year       int
+	Group      string
+	Source     DigitalFormat
+	Resolution DigitalResolution
+	Size       DigitalFileSize
+}
 
 var digitalFormatToString = map[DigitalFormat]string{
 	Blueray:              "blueray",
