@@ -2,6 +2,45 @@ package pt
 
 import "testing"
 
+func TestMinNonNegtive(t *testing.T) {
+	cases := []struct {
+		input    []int
+		expected int
+	}{
+		{
+			[]int{1, 2, 3, 4},
+			1,
+		},
+		{
+			[]int{-1, -1, -1},
+			-1,
+		},
+		{
+			[]int{-1, 0, 1},
+			0,
+		},
+		{
+			[]int{-1, 3, 4},
+			3,
+		},
+		{
+			[]int{1},
+			1,
+		},
+		{
+			[]int{-1},
+			-1,
+		},
+	}
+
+	for _, c := range cases {
+		result := minNonNegtive((c.input)...)
+		if result != c.expected {
+			t.Errorf("expect min of %v is %d, got %d", c.input, c.expected, result)
+		}
+	}
+}
+
 func TestParseTitle(t *testing.T) {
 	titles := []string{
 		//From HDC
@@ -35,7 +74,7 @@ func TestParseTitle(t *testing.T) {
 		"The Last Chance Diary Of Comedians 2013 JPN Blu-ray 1080p AVC DTS-HD MA 5 1-DiY@KBu[22.76 GB]",       ///without chinese title
 		"[铁血战士] The Predator 2018 1080p KORSUB HDRip x264 AAC2 0-STUTTERSHIT[3.54 GB]",                        //hdrip
 		"Alpha 2018 WEB-DL 1080p H264 AAC-PuTao",                                                              //without both chinese title and size
-
+		"Godzilla The Planet Eater (2018) [WEBRip] [720p] [YTS AM][774.07 MB]",                                //
 	}
 
 	expected := []MovieInfo{
@@ -68,6 +107,7 @@ func TestParseTitle(t *testing.T) {
 		{"The Last Chance Diary Of Comedians", 2013, "KBu", Blueray, FHD, 22760000000},
 		{"The Predator", 2018, "STUTTERSHIT", UnknownDigitalFormat, FHD, 3540000000},
 		{"Alpha", 2018, "PuTao", WebDL, FHD, 0},
+		{"Godzilla The Planet Eater", 2018, "", WebDL, HD, 774070000},
 	}
 
 	for i := range titles {

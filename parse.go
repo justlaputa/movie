@@ -62,6 +62,8 @@ func ParseTitle(title string) MovieInfo {
 		info.Size = parseSize(sizeString)
 	}
 
+	title = removeUnpleasentChar(title)
+
 	fields := split(title)
 
 	year, yearIndex := findYear(fields)
@@ -75,9 +77,13 @@ func ParseTitle(title string) MovieInfo {
 
 	info.Group = findGroup(fields)
 
-	minIndex := minPositive(yearIndex, sourceIndex, resIndex)
+	minIndex := minNonNegtive(yearIndex, sourceIndex, resIndex)
 
-	info.Title = strings.Join(fields[:minIndex], " ")
+	if minIndex < 0 {
+		info.Title = strings.Join(fields, " ")
+	} else {
+		info.Title = strings.Join(fields[:minIndex], " ")
+	}
 
 	return info
 }
@@ -101,6 +107,12 @@ func removeEndBracket(s string) (string, string) {
 		}
 	}
 	return s, ""
+}
+
+func removeUnpleasentChar(s string) string {
+	r := strings.NewReplacer("(", " ", ")", " ", "[", " ", "]", " ")
+
+	return r.Replace(s)
 }
 
 func parseSize(s string) DigitalFileSize {
@@ -208,12 +220,18 @@ func contains(array []string, s string) bool {
 	return false
 }
 
-func minPositive(ints ...int) int {
+func minNonNegtive(ints ...int) int {
 	m := math.MaxInt32
+	found := false
 	for _, i := range ints {
 		if i >= 0 && i < m {
 			m = i
+			found = true
 		}
 	}
-	return m
+	if found {
+		return m
+	}
+
+	return -1
 }
