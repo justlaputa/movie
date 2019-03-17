@@ -8,22 +8,8 @@ import (
 	"strings"
 )
 
-var digitalResolutionString = []string{
-	"1080p",
-	"720p",
-	"4K",
-	"Unknown",
-}
-
-func (i DigitalResolution) String() string {
-	if i >= DigitalResolution(len(digitalResolutionString)-1) {
-		return "DigitalResolution(" + strconv.FormatInt(int64(i), 10) + ")"
-	}
-	return digitalResolutionString[i]
-}
-
 var digitalFormatMap = map[DigitalFormat][]string{
-	Blueray:   []string{"bluray", "blu-ray", "blueray", "bd"},
+	Blueray:   []string{"bluray", "blu-ray", "blueray", "bdrip", "bd"},
 	HDTV:      []string{"hdtv"},
 	WebDL:     []string{"webdl", "web-dl", "webrip", "web"},
 	UHDTV:     []string{"uhdtv"},

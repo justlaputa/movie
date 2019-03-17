@@ -68,7 +68,7 @@ var stringToDigitalFormat = map[string]DigitalFormat{
 	"unknown": UnknownDigitalFormat,
 }
 
-func (f DigitalFormat) toString() string {
+func (f DigitalFormat) String() string {
 	return digitalFormatToString[f]
 }
 
@@ -106,7 +106,7 @@ var stringToDigitalResolution = map[string]DigitalResolution{
 	"unknown": UnknownResolution,
 }
 
-func (f DigitalResolution) toString() string {
+func (f DigitalResolution) String() string {
 	return digitalResolutionToString[f]
 }
 

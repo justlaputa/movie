@@ -1,6 +1,8 @@
 package pt
 
-import "testing"
+import (
+	"testing"
+)
 
 func TestMinNonNegtive(t *testing.T) {
 	cases := []struct {
@@ -75,6 +77,7 @@ func TestParseTitle(t *testing.T) {
 		"[铁血战士] The Predator 2018 1080p KORSUB HDRip x264 AAC2 0-STUTTERSHIT[3.54 GB]",                        //hdrip
 		"Alpha 2018 WEB-DL 1080p H264 AAC-PuTao",                                                              //without both chinese title and size
 		"Godzilla The Planet Eater (2018) [WEBRip] [720p] [YTS AM][774.07 MB]",                                //
+		"[龙年] Year of the Dragon 1985 Repack BDRip X264 iNT-TLF[2.54 GB]",
 	}
 
 	expected := []MovieInfo{
@@ -108,6 +111,7 @@ func TestParseTitle(t *testing.T) {
 		{"The Predator", 2018, "STUTTERSHIT", UnknownDigitalFormat, FHD, 3540000000},
 		{"Alpha", 2018, "PuTao", WebDL, FHD, 0},
 		{"Godzilla The Planet Eater", 2018, "", WebDL, HD, 774070000},
+		{"Year of the Dragon", 1985, "TLF", Blueray, UnknownResolution, 2540000000},
 	}
 
 	for i := range titles {
