@@ -62,21 +62,21 @@ type MovieInfo struct {
 }
 
 var digitalFormatToString = map[DigitalFormat]string{
-	Blueray:              "blueray",
-	HDTV:                 "hdtv",
-	WebDL:                "webdl",
-	UHDTV:                "uhdtv",
+	Blueray:              "Blueray",
+	HDTV:                 "HDTV",
+	WebDL:                "WebDL",
+	UHDTV:                "UHDTV",
 	Blueray3D:            "3D",
-	UnknownDigitalFormat: "unknown",
+	UnknownDigitalFormat: "Unknown",
 }
 
 var stringToDigitalFormat = map[string]DigitalFormat{
-	"blueray": Blueray,
-	"hdtv":    HDTV,
-	"webdl":   WebDL,
-	"uhdtv":   UHDTV,
+	"Blueray": Blueray,
+	"HDTV":    HDTV,
+	"WebDL":   WebDL,
+	"UHDTV":   UHDTV,
 	"3D":      Blueray3D,
-	"unknown": UnknownDigitalFormat,
+	"Unknown": UnknownDigitalFormat,
 }
 
 func (s DigitalFileSize) String() string {
