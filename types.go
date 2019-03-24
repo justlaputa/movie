@@ -3,6 +3,7 @@ package pt
 import (
 	"bytes"
 	"encoding/json"
+	"fmt"
 )
 
 //DigitalFormat blueray, webdl, etc
@@ -40,6 +41,16 @@ const (
 	UHD4K
 )
 
+var (
+	digitalSizeStringMap = map[string]uint64{
+		"TiB": 1024 * 1024 * 1024 * 1024,
+		"GiB": 1024 * 1024 * 1024,
+		"MiB": 1024 * 1024,
+		"KiB": 1024,
+	}
+	digitalSizeSymbols = []string{"TiB", "GiB", "MiB", "KiB"}
+)
+
 //MovieInfo metadata for a PT movie item
 type MovieInfo struct {
 	Title      string
@@ -66,6 +77,16 @@ var stringToDigitalFormat = map[string]DigitalFormat{
 	"uhdtv":   UHDTV,
 	"3D":      Blueray3D,
 	"unknown": UnknownDigitalFormat,
+}
+
+func (s DigitalFileSize) String() string {
+	for _, symb := range digitalSizeSymbols {
+		if uint64(s) > digitalSizeStringMap[symb] {
+			fvalue := float32(s) / float32(digitalSizeStringMap[symb])
+			return fmt.Sprintf("%.2f %s", fvalue, symb)
+		}
+	}
+	return fmt.Sprintf("%d Bytes", s)
 }
 
 func (f DigitalFormat) String() string {
