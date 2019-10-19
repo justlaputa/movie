@@ -41,12 +41,12 @@ func ParseTitle(title string) MovieInfo {
 		return info
 	}
 
-	title = removeBeginBracket(title)
-
 	title, sizeString := removeEndBracket(title)
 	if sizeString != "" {
 		info.Size = parseSize(sizeString)
 	}
+
+	title = removeBeginBracket(title)
 
 	title = removeUnpleasentChar(title)
 
@@ -87,11 +87,13 @@ func removeBeginBracket(s string) string {
 func removeEndBracket(s string) (string, string) {
 	s = strings.TrimSpace(s)
 	l := len(s)
-	if s[l-1:] == "]" {
+
+	if l > 0 && s[l-1:] == "]" {
 		if i := strings.LastIndex(s, "["); i > 0 {
 			return s[0:i], s[i+1 : l-1]
 		}
 	}
+
 	return s, ""
 }
 
